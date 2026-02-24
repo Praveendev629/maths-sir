@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Video Experience</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js"></script>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+    <div id="loading-container" class="loading-container">
+        <div class="loader"></div>
+        <p id="loading-text">Initializing AR...</p>
+    </div>
+
+    <div id="instruction-container" class="instruction-container hidden">
+        <p id="instruction-text">Point your camera at the target image</p>
+    </div>
+
+    <div id="permission-error" class="error-container hidden">
+        <div class="error-content">
+            <h3>Camera Access Required</h3>
+            <p id="error-message">Please enable camera access to use this application.</p>
+        </div>
+    </div>
+
+    <div id="ar-container"></div>
+
+    <div class="credit">Made by <span class="credit-name">Praveen</span></div>
+
+    <video
+        id="ar-video"
+        src="assets/video.mp4"
+        crossorigin="anonymous"
+        loop
+        playsinline
+        style="display: none;">
+    </video>
+
+    <script src="script.js"></script>
+</body>
+</html>
