@@ -252,3 +252,184 @@ a-scene {
         padding: 5px 10px;
     }
 }
+
+/* Permission Screen */
+.permission-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    z-index: 300;
+    transition: opacity 0.4s ease-out;
+    padding: 20px;
+}
+
+.permission-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.permission-card {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 24px;
+    padding: 48px 36px;
+    text-align: center;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 80px rgba(99, 102, 241, 0.1);
+    animation: cardSlideUp 0.6s ease-out;
+}
+
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.permission-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    color: var(--primary-light);
+    animation: iconPulse 2s ease-in-out infinite;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 15px rgba(99, 102, 241, 0);
+    }
+}
+
+.permission-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+}
+
+.permission-desc {
+    font-size: 0.95em;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+.permission-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-allow, .btn-deny {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 28px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+}
+
+.btn-allow {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.btn-allow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+}
+
+.btn-allow:active {
+    transform: translateY(0);
+}
+
+.btn-deny {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-deny:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+/* Denied state message */
+.denied-message {
+    margin-top: 20px;
+    padding: 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    color: #fca5a5;
+    font-size: 0.9em;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .permission-card {
+        padding: 36px 24px;
+        border-radius: 20px;
+    }
+
+    .permission-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+    }
+
+    .permission-icon svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    .permission-title {
+        font-size: 1.2em;
+    }
+
+    .permission-desc {
+        font-size: 0.9em;
+        margin-bottom: 24px;
+    }
+
+    .btn-allow, .btn-deny {
+        padding: 14px 24px;
+        font-size: 1em;
+    }
+}
