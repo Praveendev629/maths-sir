@@ -9,6 +9,28 @@ class ARVideoApp {
         this.arContainer = document.getElementById('ar-container');
         this.permissionScreen = document.getElementById('camera-permission-screen');
 
+        this.checkExistingPermission();
+    }
+
+    async checkExistingPermission() {
+        try {
+            // Check if camera permission was already granted (e.g. from a previous PWA session)
+            if (navigator.permissions && navigator.permissions.query) {
+                const result = await navigator.permissions.query({ name: 'camera' });
+                if (result.state === 'granted') {
+                    // Already have permission — skip custom screen, go straight to AR
+                    this.permissionScreen.classList.add('hidden');
+                    this.loadingContainer.classList.remove('hidden');
+                    this.init();
+                    return;
+                }
+            }
+        } catch (e) {
+            // Permissions API not supported for camera in some browsers — fall through to buttons
+            console.log('Permissions API check skipped:', e.message);
+        }
+
+        // Show the custom permission screen with Allow/Deny buttons
         this.setupPermissionButtons();
     }
 
@@ -206,4 +228,11 @@ class ARVideoApp {
 
 document.addEventListener('DOMContentLoaded', () => {
     new ARVideoApp();
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Service Worker registered:', reg.scope))
+            .catch(err => console.log('Service Worker registration failed:', err));
+    }
 });
