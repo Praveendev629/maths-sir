@@ -15,6 +15,7 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon-192.png">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js"></script>
     <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -55,8 +56,13 @@
     </div>
 
     <div id="loading-container" class="loading-container hidden">
-        <div class="loader"></div>
-        <p id="loading-text">Initializing AR...</p>
+        <div class="loading-content">
+            <p id="loading-text">Initializing AR...</p>
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <p id="loading-subtext">Preparing experience...</p>
+        </div>
     </div>
 
     <div id="instruction-container" class="instruction-container hidden">

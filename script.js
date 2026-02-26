@@ -4,6 +4,8 @@ class ARVideoApp {
         this.isARReady = false;
         this.loadingContainer = document.getElementById('loading-container');
         this.loadingText = document.getElementById('loading-text');
+        this.loadingSubtext = document.getElementById('loading-subtext');
+        this.progressBar = document.getElementById('progress-bar');
         this.instructionContainer = document.getElementById('instruction-container');
         this.permissionError = document.getElementById('permission-error');
         this.arContainer = document.getElementById('ar-container');
@@ -106,7 +108,7 @@ class ARVideoApp {
                 return;
             }
 
-            this.updateLoadingText('Compiling target image...');
+            this.updateLoadingText('Compiling targets...', 0.1);
 
             const targetImage = new Image();
             if (!window.location.protocol.startsWith('file')) {
@@ -120,17 +122,15 @@ class ARVideoApp {
                 setTimeout(() => reject(new Error('Image loading timeout')), 10000);
             });
 
-            this.updateLoadingText('Training AR model... 50%');
-
             const compiler = new MINDAR.IMAGE.Compiler();
             const dataList = await compiler.compileImageTargets([targetImage], (progress) => {
-                const percent = Math.round(progress * 100);
-                this.updateLoadingText(`Training AR model... ${percent}%`);
+                // Map 0-1 progress to 0-7500 scale for text, and 0-100% for bar
+                this.updateLoadingText('Training AR model...', progress);
             });
 
             const exportedBuffer = await compiler.exportData();
 
-            this.updateLoadingText('Starting AR...');
+            this.updateLoadingText('Starting AR...', 0.95);
             await this.startAR(exportedBuffer);
 
         } catch (error) {
@@ -221,9 +221,20 @@ class ARVideoApp {
         }
     }
 
-    updateLoadingText(text) {
+    updateLoadingText(text, progress = 0) {
         if (this.loadingText) {
             this.loadingText.textContent = text;
+        }
+
+        if (this.progressBar) {
+            const percent = Math.min(100, Math.max(0, progress * 100));
+            this.progressBar.style.width = `${percent}%`;
+        }
+
+        if (this.loadingSubtext) {
+            // Scale progress to 7500 as requested
+            const count = Math.round(progress * 7500);
+            this.loadingSubtext.textContent = `Processing: ${count} / 7500`;
         }
     }
 
