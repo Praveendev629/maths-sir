@@ -48,10 +48,20 @@ class ARVideoApp {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
-                        facingMode: 'environment',
-                        width: { ideal: 1920 },
-                        height: { ideal: 1080 }
+                        facingMode: { exact: 'environment' },
+                        width: { ideal: 3840, min: 1920 },
+                        height: { ideal: 2160, min: 1080 },
+                        frameRate: { ideal: 30 }
                     }
+                }).catch(() => {
+                    // Fallback if exact environment camera is unavailable
+                    return navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'environment',
+                            width: { ideal: 3840 },
+                            height: { ideal: 2160 }
+                        }
+                    });
                 });
                 stream.getTracks().forEach(track => track.stop());
 
@@ -134,10 +144,19 @@ class ARVideoApp {
             const blob = new Blob([mindFileData]);
             const mindFileUrl = URL.createObjectURL(blob);
 
+            // High-quality primary rear camera constraints for MindAR
+            const videoSettings = JSON.stringify({
+                facingMode: { exact: 'environment' },
+                width: { ideal: 3840, min: 1920 },
+                height: { ideal: 2160, min: 1080 },
+                frameRate: { ideal: 30, min: 24 },
+                aspectRatio: { ideal: 16 / 9 }
+            });
+
             this.arContainer.innerHTML = `
                 <a-scene
                     id="arscene"
-                    mindar-image="imageTargetSrc: ${mindFileUrl}; autoStart: true; uiLoading: no; uiScanning: no; uiError: no;"
+                    mindar-image="imageTargetSrc: ${mindFileUrl}; autoStart: true; uiLoading: no; uiScanning: no; uiError: no; filterMinCF: 0.001; filterBeta: 1000; warmupTolerance: 5; missTolerance: 5;"
                     color-space="sRGB"
                     renderer="colorManagement: true, physicallyCorrectLights"
                     vr-mode-ui="enabled: false"
@@ -148,7 +167,9 @@ class ARVideoApp {
                         <video id="video-texture" src="assets/video.mp4" loop playsinline crossorigin="anonymous"></video>
                     </a-assets>
                     
-                    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+                    <a-camera position="0 0 0" look-controls="enabled: false"
+                        mindar-image-camera="videoSettings: ${videoSettings.replace(/"/g, '&quot;')}">
+                    </a-camera>
 
                     <a-entity mindar-image-target="targetIndex: 0">
                         <a-video
