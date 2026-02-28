@@ -51,16 +51,22 @@ class ARVideoApp {
                 const stream = await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: { exact: 'environment' },
-                        width: { ideal: 3840, min: 1920 },
-                        height: { ideal: 2160, min: 1080 },
-                        frameRate: { ideal: 30 }
+                        width: { ideal: 4096, min: 1920, max: 7680 },
+                        height: { ideal: 2160, min: 1080, max: 4320 },
+                        frameRate: { ideal: 60, max: 120 },
+                        // hint to use the sharpest focus and highest quality available
+                        focusMode: 'continuous',
+                        advanced: [
+                            { torch: false },
+                            { zoom: 1.0 }
+                        ]
                     }
                 }).catch(() => {
                     // Fallback if exact environment camera is unavailable
                     return navigator.mediaDevices.getUserMedia({
                         video: {
                             facingMode: 'environment',
-                            width: { ideal: 3840 },
+                            width: { ideal: 4096 },
                             height: { ideal: 2160 }
                         }
                     });
@@ -147,10 +153,12 @@ class ARVideoApp {
             // High-quality primary rear camera constraints for MindAR
             const videoSettings = JSON.stringify({
                 facingMode: { exact: 'environment' },
-                width: { ideal: 3840, min: 1920 },
-                height: { ideal: 2160, min: 1080 },
-                frameRate: { ideal: 30, min: 24 },
-                aspectRatio: { ideal: 16 / 9 }
+                width: { ideal: 4096, min: 1920, max: 7680 },
+                height: { ideal: 2160, min: 1080, max: 4320 },
+                frameRate: { ideal: 60, min: 24, max: 120 },
+                aspectRatio: { ideal: 16 / 9 },
+                // request high quality focus if supported
+                focusMode: 'continuous'
             });
 
             this.arContainer.innerHTML = `
@@ -227,14 +235,21 @@ class ARVideoApp {
         }
 
         if (this.progressBar) {
-            const percent = Math.min(100, Math.max(0, progress * 100));
+            // reflect actual progress as percentage, but treat >=95 as 100
+            let percentRaw = Math.min(100, Math.max(0, progress * 100));
+            const percent = percentRaw >= 95 ? 100 : percentRaw;
             this.progressBar.style.width = `${percent}%`;
         }
 
         if (this.loadingSubtext) {
-            // Scale progress to 7500 as requested
-            const count = Math.round(progress * 7500);
-            this.loadingSubtext.textContent = `Processing: ${count} / 7500`;
+            let percentRaw = Math.min(100, Math.max(0, Math.round(progress * 100)));
+            const percent = percentRaw >= 95 ? 100 : percentRaw;
+            // display only "loading" text; include percent once it moves
+            if (percent === 0) {
+                this.loadingSubtext.textContent = 'loading';
+            } else {
+                this.loadingSubtext.textContent = `${percent}% loading`;
+            }
         }
     }
 

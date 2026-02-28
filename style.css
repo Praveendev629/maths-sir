@@ -39,7 +39,8 @@ body {
 
 body {
     font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    background: var(--bg-light);
+    /* more obvious pink/green theme: pink edges with green centre */
+    background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-light) 50%, var(--bg-pink) 100%);
     color: var(--text);
 }
 
@@ -98,10 +99,38 @@ a-scene {
 .progress-bar {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    /* stronger pink & green animation */
+    background: linear-gradient(90deg, var(--bg-pink) 10%, var(--primary) 30%, var(--bg-pink) 60%, var(--primary) 90%);
+    background-size: 200% 100%;
+    animation: slideGradient 1.5s linear infinite;
     border-radius: 20px;
     transition: width 0.3s ease-out;
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(45deg, var(--bg-pink) 0 10px, var(--primary) 0 20px);
+    opacity: 0.35;
+    animation: moveStripes 1s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes moveStripes {
+    from { background-position: 0 0; }
+    to { background-position: 40px 0; }
+}
+
+@keyframes slideGradient {
+    from { background-position: 0 0; }
+    to { background-position: -200% 0; }
 }
 
 #loading-text {
@@ -189,12 +218,14 @@ a-scene {
 /* Credit */
 .credit {
     position: fixed;
+    /* top right corner as requested */
     top: 20px;
     right: 20px;
     font-size: 0.85em;
-    color: var(--text-muted);
+    /* theme colors: light green/pink gradient */
+    color: var(--text);
     z-index: 30;
-    background: var(--card-bg);
+    background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-pink) 100%);
     padding: 10px 20px;
     border-radius: 30px;
     backdrop-filter: blur(10px);
@@ -240,8 +271,11 @@ a-scene {
     }
 
     .credit {
-        bottom: 15px;
+        top: 15px;
         right: 15px;
+        bottom: auto;
+        left: auto;
+        transform: none;
         font-size: 0.85em;
         padding: 6px 12px;
     }
@@ -280,8 +314,11 @@ a-scene {
     }
 
     .credit {
-        bottom: 12px;
+        top: 12px;
         right: 12px;
+        bottom: auto;
+        left: auto;
+        transform: none;
         font-size: 0.8em;
         padding: 5px 10px;
     }
