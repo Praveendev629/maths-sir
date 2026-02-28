@@ -234,19 +234,16 @@ class ARVideoApp {
             this.loadingText.textContent = text;
         }
 
+        let percent = Math.min(100, Math.max(0, Math.round(progress * 100)));
+        if (progress >= 0.95) percent = 100;
+
         if (this.progressBar) {
-            // reflect actual progress as percentage, but treat >=95 as 100
-            let percentRaw = Math.min(100, Math.max(0, progress * 100));
-            const percent = percentRaw >= 95 ? 100 : percentRaw;
             this.progressBar.style.width = `${percent}%`;
         }
 
         if (this.loadingSubtext) {
-            let percentRaw = Math.min(100, Math.max(0, Math.round(progress * 100)));
-            const percent = percentRaw >= 95 ? 100 : percentRaw;
-            // display only "loading" text; include percent once it moves
             if (percent === 0) {
-                this.loadingSubtext.textContent = 'loading';
+                this.loadingSubtext.textContent = 'Loading...';
             } else {
                 this.loadingSubtext.textContent = `${percent}% loading`;
             }
