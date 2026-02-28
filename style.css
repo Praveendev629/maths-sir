@@ -15,10 +15,10 @@
     /* Pink 500 */
     --secondary-light: #fbcfe8;
     /* Pink 200 */
-    --bg-light: #f0fdf4;
-    /* Emerald 50 */
-    --bg-pink: #fdf2f8;
-    /* Pink 50 */
+    --bg-light: #d1fae5;
+    /* Emerald 100 */
+    --bg-pink: #fbcfe8;
+    /* Pink 200 */
     --text: #064e3b;
     /* Emerald 900 */
     --text-muted: #065f46;
@@ -124,13 +124,23 @@ a-scene {
 }
 
 @keyframes moveStripes {
-    from { background-position: 0 0; }
-    to { background-position: 40px 0; }
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 40px 0;
+    }
 }
 
 @keyframes slideGradient {
-    from { background-position: 0 0; }
-    to { background-position: -200% 0; }
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -200% 0;
+    }
 }
 
 #loading-text {
@@ -434,7 +444,7 @@ a-scene {
 }
 
 .btn-allow {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
 }
